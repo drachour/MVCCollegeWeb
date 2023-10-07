@@ -1,0 +1,102 @@
+﻿@model IndexViewModel
+@using System.Linq
+@{
+    var listingSemesters = Model.FilterSemester;
+    var distinctSemesters = listingSemesters.Select(s => s.Semester).Distinct().ToList();
+    var distinctDepartment = listingSemesters.Select(s => s.Department).Distinct().ToList();
+}
+
+<div class="card-body">
+    <div class="filter-container mb-3 row">
+        <div class="col-4">
+            <label>Filter Session:</label>
+            <select id="filterSession">
+                <option value="All">All</option>
+                @foreach (var semester in distinctSemesters)
+                {
+                    <option value="@semester">@semester</option>
+                }
+            </select>
+        </div>
+        <div class="col-4">
+            <label>Filter Department:</label>
+            <select id="filterDepartment">
+                <option value="">All</option>
+                @foreach (var department in distinctDepartment)
+                {
+                    <option value="@department">@department</option>
+                }
+            </select>
+        </div>
+        <div class="col-4">
+            <label>Search Cours:</label>
+            <input type="text" id="searchCours">
+        </div>
+    </div>
+    <table class="table" id="headerTable">
+        <thead>
+            <tr>
+                <th hidden>Id</th>
+                <th hidden>teacherId</th>
+                <th>Session</th>
+                <th>Departement</th>
+                <th>Cours</th>
+                <th>Professeur</th>
+            </tr>
+        </thead>
+    </table>
+    <div style="height: 300px; overflow-y: auto;">
+        <table class="table" id="coursesTable">
+            <tbody>
+                @foreach (var item in Model.FilterSemester)
+                {
+                    <tr>
+                        <th hidden>@item.Id</th>
+                        <th hidden>@item.TeacherId</th>
+                        <th>@item.Semester</th>
+                        <th>@item.Department</th>
+                        <th>@item.Course</th>
+                        <th>@item.TeacherFirstName @item.TeacherLastName</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card-footer">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Étudiants</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table" id="studentHeader">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Note</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="height: 200px; overflow-y: auto;">
+                        <table class="table" id="studentTable"></table>
+                    </div>
+                    <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#addStudentModal">Ajouter</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Informations sur le cours</h5>
+                </div>
+                <div class="card-body" id="teacherView"></div>
+            </div>
+        </div>
+    </div>
+</div>

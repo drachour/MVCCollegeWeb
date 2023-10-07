@@ -1,0 +1,45 @@
+﻿
+<div>
+    <table class="table" id="studentTable">
+        <tbody id="studentSection">
+            @foreach (var item in Model.CourseSemesterStudents)
+            {
+                <tr>
+                    <td>@item.StudentId</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Grade</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm">Retirer</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="teacherSection">
+        <div id="professorDisplay">
+            <div class="row">
+                <p class="col-10">Professeur: <span id="professorName">@Model.CourseInfo.TeacherFirstName @Model.CourseInfo.TeacherLastName</span></p>
+                <button id="changeProfessorButton" class="btn btn-secondary col-2">Changer</button>
+            </div>
+        </div>
+        <div id="changeProfessorDropdown" style="display:none;">
+            <select class="form-control">
+                @foreach (var item in Model.CourseTeacher)
+                {
+                    <option value="@item.FirstName @item.LastName" data="@item.Id">@item.FirstName @item.LastName</option>
+                }
+            </select>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary mt-2 mb-2" id="confirmProfessorChange">Confirmer</button>
+            </div>
+        </div>
+        <div class="row">
+            <span class="col-2">Horaire:</span>
+            <span class="col-6">@Html.Raw(Model.CourseInfo.Schedule.Replace(" / ", " <br>").Replace("u00E0", "à"))</span>
+        </div>
+        <p>Lieu: @Model.CourseInfo.Location</p>
+    </div>
+</div>
+
+

@@ -1,0 +1,15 @@
+﻿<table class="table" id="coursesTable">
+    <tbody>
+        @foreach (var item in Model.FilterSemester)
+        {
+            <tr>
+                <th hidden>@item.SemesterId</th>
+                <th hidden>@item.TeacherId</th>
+                <th>@item.Semester</th>
+                <th>@item.Department</th>
+                <th>@item.Course</th>
+                <th>@item.TeacherFirstName @item.TeacherLastName</th>
+            </tr>
+        }
+    </tbody>
+</table>
