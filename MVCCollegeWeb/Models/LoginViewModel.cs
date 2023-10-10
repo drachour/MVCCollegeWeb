@@ -30,7 +30,6 @@ namespace MVCCollegeWeb.Models
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                //GET Method
                 string method = "AccountValidate";
                 string parameters = $"{{\"parameters\":[\"{username}\",\"{password}\"]}}";
 
