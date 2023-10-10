@@ -163,7 +163,7 @@ namespace MVCCollegeWeb.Models
             foreach (var daySchedule in daySchedules)
             {
                 var parts = daySchedule.Trim().Split(' ');
-                if (parts.Length < 5) continue; // Not a valid format
+                if (parts.Length < 5) continue;
                 if (!parts[0].Equals(day, StringComparison.OrdinalIgnoreCase)) continue;
 
                 var startTime = TimeSpan.Parse(parts[1]);
