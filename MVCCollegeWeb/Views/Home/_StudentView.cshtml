@@ -1,0 +1,72 @@
+﻿<div class="card-body">
+    <div id="filterSection" class="mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="filterPrenom" placeholder="Filter by Prénom">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="filterNom" placeholder="Filter by Nom">
+            </div>
+            <div class="col-md-3">
+                <input type="tel" class="form-control" id="filterTelephone" placeholder="Filter by Téléphone">
+            </div>
+            <div class="col-md-3">
+                <input type="email" class="form-control" id="filterCourriel" placeholder="Filter by Courriel">
+            </div>
+        </div>
+    </div>
+    <table class="table" id="headerTable">
+        <thead>
+            <tr>
+                <th hidden>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Téléphone</th>
+                <th>Courriel</th>
+            </tr>
+        </thead>
+    </table>
+    <div style="height: 300px; overflow-y: auto;">
+        <table class="table" id="studentTable">
+            <tbody>
+                @foreach (var item in Model.StudentListing)
+                {
+                    <tr data-id="@item.Id" data-fname="@item.FirstName" data-lname="@item.LastName" data-phone="@item.Phone" data-mail="@item.Email">
+                        <th hidden>@item.Id</th>
+                        <th>@item.FirstName</th>
+                        <th>@item.LastName</th>
+                        <th>@item.Phone</th>
+                        <th>@item.Email</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card-footer">
+    <div class="card col-6">
+        <div class="card-header">
+            <h5>Information de l'étudiant</h5>
+        </div>
+        <div class="card-body studentView disabled">
+            <div class="mb-3">
+                <label for="prenomInput" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenomInput" placeholder="Entrez le prénom">
+            </div>
+            <div class="mb-3">
+                <label for="nomInput" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nomInput" placeholder="Entrez le nom">
+            </div>
+            <div class="mb-3">
+                <label for="telephoneInput" class="form-label">Téléphone</label>
+                <input type="tel" class="form-control" id="telephoneInput" placeholder="Entrez le numéro de téléphone">
+            </div>
+            <div class="mb-3">
+                <label for="courrielInput" class="form-label">Courriel</label>
+                <input type="email" class="form-control" id="courrielInput" placeholder="Entrez le courriel">
+            </div>
+
+            <button class="btn btn-primary mt-2" id="btnStudentSave" data-id="0">Sauvegarder</button>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVCCollegeWeb.Databases;
 using MVCCollegeWeb.Models;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace MVCCollegeWeb.Controllers
 {
@@ -26,12 +28,12 @@ namespace MVCCollegeWeb.Controllers
                 return View("Login", login);
             }
 
-            var index = IndexViewModel.GetInstance();
+            var index = IndexViewModel.GetInstance(_logger);
 
             await index.GetCourses();
-            await index.GetPersons();
+            await index.GetStudents();
 
-            return View("Index",index);
+            return View("Index", index);
         }
 
         public IActionResult Login()
@@ -48,31 +50,104 @@ namespace MVCCollegeWeb.Controllers
 
         public IActionResult CoursView()
         {
-            var index = IndexViewModel.GetInstance();
+            var index = IndexViewModel.GetInstance(_logger);
             return PartialView("_CoursView", index);
         }
 
-        public async Task<IActionResult> CoursCombinedView(string scheduleId)
+        public IActionResult StudentView()
         {
-            var index = IndexViewModel.GetInstance();
-            await index.GetStudentsByCourse(scheduleId);
+            var index = IndexViewModel.GetInstance(_logger);
+            return PartialView("_StudentView", index);
+        }
+
+        public IActionResult CourseTable(int teacherId)
+        {
+            var index = IndexViewModel.GetInstance(_logger);
+            index.UpdateCourseTeacher(teacherId).Wait();
+            return PartialView("_CoursTable", index);
+        }
+
+        public IActionResult CoursCombinedView(string scheduleId)
+        {
+            var index = IndexViewModel.GetInstance(_logger);
+            index.GetStudentsByCourse(scheduleId).Wait();
 
             return PartialView("_CoursCombinedView", index);
         }
 
-        public async Task<IActionResult> GetAllCourses()
+        public IActionResult CallModalStudent()
         {
-            var model = IndexViewModel.GetInstance();
+            var index = IndexViewModel.GetInstance(_logger);
+            return PartialView("_ModalStudent", index);
+        }
 
-            await model.GetCourses();
+        public IActionResult GetAllCourses()
+        {
+            var model = IndexViewModel.GetInstance(_logger);
+
+            model.GetCourses().Wait();
 
             return View(model);
         }
 
-        [HttpGet]
+        public IActionResult UpdateGrade(int studentId, decimal grade)
+        {
+            try
+            {
+                var index = IndexViewModel.GetInstance(_logger);
+                index.UpdateGrade(studentId, grade).Wait();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error from updating the grade.");
+
+                return Json(new { success = false, message = "Error from updating the grade." });
+            }
+        }
+
+        public IActionResult InsertCourseStudent(int studentId)
+        {
+            var index = IndexViewModel.GetInstance(_logger);
+            index.InsertStudentCourse(studentId).Wait();
+            return PartialView("_CoursCombinedView", index);
+        }
+
+        public IActionResult RemoveStudentFromCourse(int studentId)
+        {
+            try
+            {
+                var index = IndexViewModel.GetInstance(_logger);
+                index.RemoveStudentCourse(studentId).Wait();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error removing student from course.");
+
+                return Json(new { success = false, message = "Error removing student from course." });
+            }
+        }
+
+        public IActionResult UpdateStudentInfo(Person student)
+        {
+            try
+            {
+                var index = IndexViewModel.GetInstance(_logger);
+                index.UpdatePersonInfo(student).Wait();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating student information.");
+
+                return Json(new { success = false, message = "Error updating student information." });
+            }
+        }
+        
         public IActionResult GetFilteredSemesters(string semester = "", string department = "", string course = "")
         {
-            var index = IndexViewModel.GetInstance();  
+            var index = IndexViewModel.GetInstance(_logger);
 
             if (!string.IsNullOrEmpty(semester))
             {
@@ -91,7 +166,6 @@ namespace MVCCollegeWeb.Controllers
 
             return PartialView("_CoursTable", index);
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

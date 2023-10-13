@@ -1,5 +1,4 @@
-﻿
-<div>
+﻿<div>
     <table class="table" id="studentTable">
         <tbody id="studentSection">
             @foreach (var item in Model.CourseSemesterStudents)
@@ -8,9 +7,9 @@
                     <td>@item.StudentId</td>
                     <td>@item.FirstName</td>
                     <td>@item.LastName</td>
-                    <td>@item.Grade</td>
+                    <td class="editable-grade">@item.Grade</td>
                     <td>
-                        <button class="btn btn-danger btn-sm">Retirer</button>
+                        <button class="btn btn-danger btn-sm" data="@item.StudentId" id="btnStudentRemove">Retirer</button>
                     </td>
                 </tr>
             }
@@ -41,5 +40,3 @@
         <p>Lieu: @Model.CourseInfo.Location</p>
     </div>
 </div>
-
-
